@@ -24,10 +24,12 @@ db = SQLAlchemy(app)
 
 @app.route("/")
 def hello_world():
-    return send_from_directory("../Frontend", "index.html")
+    return send_from_directory("..", "index.html")
 
 @app.route("/<path:filename>")
 def serve_frontend(filename):
+    if filename.startswith("Frontend/"):
+        return send_from_directory("../Frontend", filename[len("Frontend/"):])
     return send_from_directory("../Frontend", filename)
 
 # Database models

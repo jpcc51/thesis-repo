@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Livestock Management System
 
 A comprehensive web-based system for managing livestock operations, including farm management, animal tracking, health records, financial management, and analytics.
@@ -138,3 +139,6 @@ This project is part of a thesis work. Please contact the author for usage permi
 ## Author
 
 Juan Pablo - Thesis Project 2025
+=======
+# thesis-repo
+>>>>>>> 899f9cbe41f9b0b906c11cef119d0ff42c2dad84
