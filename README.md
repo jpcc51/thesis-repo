@@ -1,144 +1,140 @@
-<<<<<<< HEAD
-# Livestock Management System
+# Sistema de Gestión Ganadera
 
-A comprehensive web-based system for managing livestock operations, including farm management, animal tracking, health records, financial management, and analytics.
+Un sistema web integral para la gestión de operaciones ganaderas, incluyendo administración de fincas, seguimiento de animales, registros sanitarios, gestión financiera y análisis de datos.
 
-## Features
+## Características
 
-- **Farm Management**: Manage multiple farms, lots, and land areas
-- **Animal Tracking**: Complete CRUD operations for livestock with detailed records
-- **Health Records**: Track veterinary visits, vaccinations, and health status
-- **Movement Tracking**: Record animal movements between farms and lots
-- **Slaughter Management**: Track meat production and yields
-- **Supplier Management**: Manage suppliers and purchase records
-- **Financial Tracking**: Monitor costs, revenues, and profitability
-- **Nutrition Management**: Create and assign feed rations to animals
-- **Analytics Dashboard**: View performance metrics and insights
-- **File Upload Support**: Upload certificates and documents
+- **Gestión de Fincas**: Administra múltiples fincas, lotes y áreas de terreno
+- **Seguimiento de Animales**: Operaciones CRUD completas para ganado con registros detallados
+- **Registros Sanitarios**: Seguimiento de visitas veterinarias, vacunaciones y estado de salud
+- **Seguimiento de Movimientos**: Registro de movimientos de animales entre fincas y lotes
+- **Gestión de Sacrificio**: Seguimiento de producción de carne y rendimientos
+- **Gestión de Proveedores**: Administración de proveedores y registros de compras
+- **Seguimiento Financiero**: Monitoreo de costos, ingresos y rentabilidad
+- **Gestión Nutricional**: Creación y asignación de raciones de alimento a animales
+- **Panel de Análisis**: Visualización de métricas de rendimiento e información
+- **Soporte de Carga de Archivos**: Subida de certificados y documentos
 
-## Technology Stack
+## Tecnologías Utilizadas
 
-- **Backend**: Python Flask with SQLAlchemy
-- **Database**: SQLite
+- **Backend**: Python Flask con SQLAlchemy
+- **Base de Datos**: SQLite
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **File Handling**: Werkzeug for secure file uploads
+- **Manejo de Archivos**: Werkzeug para cargas de archivos seguras
 
-## Installation
+## Instalación
 
-### Prerequisites
+### Prerrequisitos
 
-- Python 3.8 or higher
-- pip (Python package manager)
+- Python 3.8 o superior
+- pip (gestor de paquetes de Python)
 
-### Setup Instructions
+### Instrucciones de Configuración
 
-1. **Clone the repository:**
+1. **Clona el repositorio:**
    ```bash
    git clone https://github.com/jpcc51/thesis-repo.git
    cd thesis-repo
    ```
 
-2. **Create and activate virtual environment:**
+2. **Crea y activa el entorno virtual:**
    ```bash
    cd Backend
    python -m venv .venv
-   # On Windows:
+   # En Windows:
    .venv\Scripts\activate
-   # On macOS/Linux:
+   # En macOS/Linux:
    source .venv/bin/activate
    ```
 
-3. **Install dependencies:**
+3. **Instala las dependencias:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Run the application:**
+4. **Ejecuta la aplicación:**
    ```bash
    python app.py
    ```
 
-5. **Access the application:**
-   Open your browser and navigate to: http://localhost:5000
+5. **Accede a la aplicación:**
+   Abre tu navegador y navega a: http://localhost:5000
 
-## Database
+## Base de Datos
 
-The application uses SQLite database which is automatically created when you first run the app. The database includes the following main tables:
+La aplicación utiliza una base de datos SQLite que se crea automáticamente cuando ejecutas la aplicación por primera vez. La base de datos incluye las siguientes tablas principales:
 
-- `fincas` - Farm information
-- `lotes` - Land lots within farms
-- `bovinos` - Livestock animals
-- `registros_sanitarios` - Health records
-- `movimientos_animales` - Animal movements
-- `pesajes_canales` - Slaughter weights
-- `proveedores` - Suppliers
-- `insumos` - Supplies and inputs
-- `compras` - Purchase records
-- `ventas` - Sales records
-- `alimentacion` - Feed rations
-- And more...
+- `fincas` - Información de fincas
+- `lotes` - Lotes de terreno dentro de las fincas
+- `bovinos` - Animales de ganado
+- `registros_sanitarios` - Registros sanitarios
+- `movimientos_animales` - Movimientos de animales
+- `pesajes_canales` - Pesos de canales
+- `proveedores` - Proveedores
+- `insumos` - Suministros e insumos
+- `compras` - Registros de compras
+- `ventas` - Registros de ventas
+- `alimentacion` - Raciones de alimento
+- Y más...
 
-## Project Structure
+## Estructura del Proyecto
 
 ```
 thesis-repo/
 ├── Backend/
-│   ├── app.py                 # Main Flask application
-│   ├── create_db.py          # Database creation script
-│   ├── requirements.txt       # Python dependencies
-│   ├── livestock.db          # SQLite database (auto-generated)
-│   ├── uploads/              # Uploaded files directory
-│   └── .venv/                # Virtual environment (not in repo)
+│   ├── app.py                 # Aplicación principal de Flask
+│   ├── create_db.py          # Script de creación de base de datos
+│   ├── requirements.txt       # Dependencias de Python
+│   ├── livestock.db          # Base de datos SQLite (auto-generada)
+│   ├── uploads/              # Directorio de archivos subidos
+│   └── .venv/                # Entorno virtual (no en el repo)
 ├── Frontend/
-│   ├── index.html            # Main HTML page
-│   ├── script.js             # Frontend JavaScript
-│   └── styles.css            # CSS styles
-├── .gitignore               # Git ignore rules
-├── README.md                # This file
-└── architecture_plan.md     # System architecture documentation
+│   ├── script.js             # JavaScript del frontend
+│   └── styles.css            # Estilos CSS
+├── index.html                # Página principal HTML
+├── .gitignore               # Reglas de ignorar de Git
+├── README.md                # Este archivo
+└── architecture_plan.md     # Documentación de arquitectura del sistema
 ```
 
-## API Endpoints
+## Endpoints de la API
 
-The application provides RESTful API endpoints for all data operations:
+La aplicación proporciona endpoints RESTful para todas las operaciones de datos:
 
-- `GET/POST /api/fincas` - Farm management
-- `GET/POST /api/lotes` - Land lot management
-- `GET/POST /api/bovinos` - Animal management
-- `GET/POST /api/registros_sanitarios` - Health records
-- `GET/POST /api/movimientos_animales` - Animal movements
-- `GET/POST /api/pesajes_canales` - Slaughter records
-- `GET/POST /api/proveedores` - Supplier management
-- `GET/POST /api/insumos` - Supply management
-- `GET/POST /api/compras` - Purchase management
-- `GET/POST /api/ventas` - Sales management
-- `GET/POST /api/alimentacion` - Feed ration management
-- And more...
+- `GET/POST /api/fincas` - Gestión de fincas
+- `GET/POST /api/lotes` - Gestión de lotes de terreno
+- `GET/POST /api/bovinos` - Gestión de animales
+- `GET/POST /api/registros_sanitarios` - Registros sanitarios
+- `GET/POST /api/movimientos_animales` - Movimientos de animales
+- `GET/POST /api/pesajes_canales` - Registros de sacrificio
+- `GET/POST /api/proveedores` - Gestión de proveedores
+- `GET/POST /api/insumos` - Gestión de suministros
+- `GET/POST /api/compras` - Gestión de compras
+- `GET/POST /api/ventas` - Gestión de ventas
+- `GET/POST /api/alimentacion` - Gestión de raciones de alimento
+- Y más...
 
-## Usage
+## Uso
 
-1. **Start the Application**: Run `python app.py` in the Backend directory
-2. **Access Dashboard**: Open http://localhost:5000
-3. **Navigate Sections**: Use the sidebar to access different modules
-4. **Add Data**: Use the "Add New" forms in each section
-5. **View Data**: Lists show all records with edit/delete options
-6. **Upload Files**: Health records support certificate uploads
+1. **Inicia la Aplicación**: Ejecuta `python app.py` en el directorio Backend
+2. **Accede al Panel**: Abre http://localhost:5000
+3. **Navega por las Secciones**: Usa la barra lateral para acceder a diferentes módulos
+4. **Agrega Datos**: Usa los formularios "Agregar Nuevo" en cada sección
+5. **Visualiza Datos**: Las listas muestran todos los registros con opciones de editar/eliminar
+6. **Sube Archivos**: Los registros sanitarios soportan subida de certificados
 
-## Contributing
+## Contribución
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+1. Haz un fork del repositorio
+2. Crea una rama de características
+3. Realiza tus cambios
+4. Prueba exhaustivamente
+5. Envía una solicitud de pull
 
-## License
+## Licencia
 
-This project is part of a thesis work. Please contact the author for usage permissions.
+Este proyecto es parte de un trabajo de tesis. Por favor contacta al autor para permisos de uso.
 
-## Author
+## Autor
 
-Juan Pablo - Thesis Project 2025
-=======
-# thesis-repo
->>>>>>> 899f9cbe41f9b0b906c11cef119d0ff42c2dad84
+Juan Pablo - Proyecto de Tesis 2025
