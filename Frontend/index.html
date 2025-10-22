@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livestock Logistic Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Livestock Management System</h1>
+        <p>Manage farms, lands, animals, and track mass, emissions, and finances</p>
+    </header>
+
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h2>Principal</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="showSection('farms')">Fincas</a></li>
+            <li><a href="#" onclick="showSection('lands')">lotes</a></li>
+            <li><a href="#" onclick="showSection('animals')">Animales</a></li>
+        </ul>
+
+        <div class="sidebar-header">
+            <h2>Salud y Producción</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="showSection('health-records')">Registros Sanitarios</a></li>
+            <li><a href="#" onclick="showSection('movements')">Movimientos de Animales</a></li>
+            <li><a href="#" onclick="showSection('slaughter-weights')">Peso Carne Sacrificio</a></li>
+        </ul>
+
+        <div class="sidebar-header">
+             <h2>Suministros y Finanzas</h2>
+         </div>
+         <ul class="sidebar-menu">
+             <li><a href="#" onclick="showSection('suppliers')">Proveedores</a></li>
+             <li><a href="#" onclick="showSection('supplies')">Suministros</a></li>
+             <li><a href="#" onclick="showSection('purchases')">Compras y Servicios</a></li>
+             <li><a href="#" onclick="showSection('sales')">Ventas</a></li>
+         </ul>
+
+        <div class="sidebar-header">
+            <h2>Nutrición</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="showSection('rations')">Raciones</a></li>
+            <li><a href="#" onclick="showSection('ration-ingredients')">Ingredientes de Ración</a></li>
+            <li><a href="#" onclick="showSection('animal-rations')">Raciones de Animales</a></li>
+        </ul>
+
+        <div class="sidebar-header">
+             <h2>Documentación</h2>
+         </div>
+         <ul class="sidebar-menu">
+             <li><a href="#" onclick="showSection('certificates')">Certificates</a></li>
+             <li><a href="#" onclick="showSection('export-docs')">Export Documents</a></li>
+         </ul>
+
+        <div class="sidebar-header">
+            <h2>Users</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="showSection('users')">Users</a></li>
+            <li><a href="#" onclick="showSection('user-farms')">User Farms</a></li>
+        </ul>
+
+        <div class="sidebar-header">
+            <h2>Data & Analytics</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="showSection('data-input')">Data Input</a></li>
+            <li><a href="#" onclick="showSection('analytics')">Analytics</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Farms Section -->
+        <section id="farms" class="section">
+            <h2>Farm Management</h2>
+            <div class="form-container">
+                <h3>Add New Farm</h3>
+                <form id="farm-form">
+                    <input type="text" id="farm-name" placeholder="Nombre" required>
+                    <input type="text" id="farm-depto" placeholder="Departamento">
+                    <input type="text" id="farm-municipio" placeholder="Municipio">
+                    <input type="number" id="farm-area" placeholder="Area (ha)" step="0.01">
+                    <input type="text" id="farm-propietario" placeholder="Propietario">
+                    <select id="farm-uso" required>
+                        <option value="">Select Uso Suelo</option>
+                        <option value="Carne">Carne</option>
+                        <option value="Recuperación">Recuperación</option>
+                    </select>
+                    <input type="number" id="farm-lat" placeholder="Latitud" step="0.000001">
+                    <input type="number" id="farm-lon" placeholder="Longitud" step="0.000001">
+                    <input type="datetime-local" id="farm-fecha" placeholder="Fecha Registro">
+                    <button type="submit">Add Farm</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Fincas</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> Nombre, Departamento, Municipio, Propietario, Uso del Suelo
+                </div>
+                <ul id="farms-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Edit Farm</h3>
+                <select id="edit-farm-select">
+                    <option value="">Select Farm to Edit</option>
+                </select>
+                <form id="edit-farm-form" style="display: none;">
+                    <input type="text" id="edit-farm-name" placeholder="Nombre" required>
+                    <input type="text" id="edit-farm-depto" placeholder="Departamento">
+                    <input type="text" id="edit-farm-municipio" placeholder="Municipio">
+                    <input type="number" id="edit-farm-area" placeholder="Area (ha)" step="0.01">
+                    <input type="text" id="edit-farm-propietario" placeholder="Propietario">
+                    <select id="edit-farm-uso" required>
+                        <option value="">Select Uso Suelo</option>
+                        <option value="Carne">Carne</option>
+                        <option value="Recuperación">Recuperación</option>
+                    </select>
+                    <input type="number" id="edit-farm-lat" placeholder="Latitud" step="0.000001">
+                    <input type="number" id="edit-farm-lon" placeholder="Longitud" step="0.000001">
+                    <input type="datetime-local" id="edit-farm-fecha" placeholder="Fecha Registro">
+                    <button type="submit">Update Farm</button>
+                    <button type="button" onclick="cancelEditFarm()">Cancel</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Health Records Section -->
+        <section id="health-records" class="section hidden">
+            <h2>Registros Sanitarios</h2>
+            <div class="form-container">
+                <h3>Agregar Registro Sanitario</h3>
+                <form id="health-form">
+                    <select id="health-animal" required>
+                        <option value="">Seleccionar Animal</option>
+                    </select>
+                    <select id="health-test-type" required>
+                        <option value="">Seleccionar Tipo de Prueba</option>
+                        <option value="Examen">Examen</option>
+                        <option value="Vacuna">Vacuna</option>
+                    </select>
+                    <select id="health-status" required>
+                        <option value="">Seleccionar Estado de Salud</option>
+                        <option value="Sano">Sano</option>
+                        <option value="Enfermo">Enfermo</option>
+                    </select>
+                    <textarea id="health-result" placeholder="Resultado (descripción detallada)" rows="3"></textarea>
+                    <input type="datetime-local" id="health-sample-date" placeholder="Fecha de Muestra">
+                    <input type="text" id="health-laboratory" placeholder="Laboratorio">
+                    <input type="number" id="health-cost" placeholder="Costo del Examen/Vacunación" step="0.01">
+                    <textarea id="health-observations" placeholder="Observaciones"></textarea>
+                    <input type="file" id="health-certificate" accept=".jpg,.jpeg,.pdf" style="margin: 10px 0;">
+                    <small style="color: #666; font-size: 0.8em;">Opcional: Subir certificado (JPG o PDF)</small>
+                    <button type="submit">Agregar Registro Sanitario</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Registros Sanitarios</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> ID Registro, Animal, Tipo de Prueba, Estado de Salud, Costo del Examen, Fecha de Muestra
+                </div>
+                <ul id="health-records-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Editar Registro Sanitario</h3>
+                <select id="edit-health-select">
+                    <option value="">Seleccionar Registro para Editar</option>
+                </select>
+                <form id="edit-health-form" style="display: none;">
+                    <select id="edit-health-animal" required>
+                        <option value="">Seleccionar Animal</option>
+                    </select>
+                    <select id="edit-health-test-type" required>
+                        <option value="">Seleccionar Tipo de Prueba</option>
+                        <option value="Examen">Examen</option>
+                        <option value="Vacuna">Vacuna</option>
+                    </select>
+                    <select id="edit-health-status" required>
+                        <option value="">Seleccionar Estado de Salud</option>
+                        <option value="Sano">Sano</option>
+                        <option value="Enfermo">Enfermo</option>
+                    </select>
+                    <textarea id="edit-health-result" placeholder="Resultado (descripción detallada)" rows="3"></textarea>
+                    <input type="datetime-local" id="edit-health-sample-date" placeholder="Fecha de Muestra">
+                    <input type="text" id="edit-health-laboratory" placeholder="Laboratorio">
+                    <input type="number" id="edit-health-cost" placeholder="Costo del Examen/Vacunación" step="0.01">
+                    <textarea id="edit-health-observations" placeholder="Observaciones"></textarea>
+                    <input type="file" id="edit-health-certificate" accept=".jpg,.jpeg,.pdf" style="margin: 10px 0;">
+                    <small style="color: #666; font-size: 0.8em;">Opcional: Subir certificado (JPG o PDF)</small>
+                    <button type="submit">Actualizar Registro Sanitario</button>
+                    <button type="button" onclick="cancelEditHealth()">Cancelar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Animal Movements Section -->
+        <section id="movements" class="section hidden">
+            <h2>Movimientos de Animales</h2>
+            <div class="form-container">
+                <h3>Agregar Movimiento</h3>
+                <form id="movement-form">
+                    <select id="movement-animal" required>
+                        <option value="">Seleccionar Animal</option>
+                    </select>
+                    <select id="movement-type" required onchange="toggleMovementFields()">
+                        <option value="">Seleccionar Tipo de Movimiento</option>
+                        <option value="Interno">Interno</option>
+                        <option value="Importación">Importación</option>
+                        <option value="Exportación">Exportación</option>
+                    </select>
+                    <input type="datetime-local" id="movement-date" required>
+
+                    <!-- Origin fields (shown for Interno and Exportación) -->
+                    <div id="origin-fields" style="display: none;">
+                        <select id="movement-origin-farm">
+                            <option value="">Seleccionar Finca Origen</option>
+                        </select>
+                        <select id="movement-origin-land">
+                            <option value="">Seleccionar Lote Origen</option>
+                        </select>
+                    </div>
+
+                    <!-- Destination fields (shown for Interno and Importación) -->
+                    <div id="destination-fields" style="display: none;">
+                        <select id="movement-dest-farm">
+                            <option value="">Seleccionar Finca Destino</option>
+                        </select>
+                        <select id="movement-dest-land">
+                            <option value="">Seleccionar Lote Destino</option>
+                        </select>
+                    </div>
+
+                    <input type="text" id="movement-motive" placeholder="Motivo">
+                    <button type="submit">Agregar Movimiento</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Movimientos</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> ID Movimiento, Animal, Tipo de Movimiento, Fecha
+                </div>
+                <ul id="movements-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Editar Movimiento</h3>
+                <select id="edit-movement-select">
+                    <option value="">Seleccionar Movimiento para Editar</option>
+                </select>
+                <form id="edit-movement-form" style="display: none;">
+                    <select id="edit-movement-animal" required>
+                        <option value="">Seleccionar Animal</option>
+                    </select>
+                    <select id="edit-movement-type" required onchange="toggleEditMovementFields()">
+                        <option value="">Seleccionar Tipo de Movimiento</option>
+                        <option value="Interno">Interno</option>
+                        <option value="Importación">Importación</option>
+                        <option value="Exportación">Exportación</option>
+                    </select>
+                    <input type="datetime-local" id="edit-movement-date" required>
+
+                    <!-- Origin fields (shown for Interno and Exportación) -->
+                    <div id="edit-origin-fields" style="display: none;">
+                        <select id="edit-movement-origin-farm">
+                            <option value="">Seleccionar Finca Origen</option>
+                        </select>
+                        <select id="edit-movement-origin-land">
+                            <option value="">Seleccionar Lote Origen</option>
+                        </select>
+                    </div>
+
+                    <!-- Destination fields (shown for Interno and Importación) -->
+                    <div id="edit-destination-fields" style="display: none;">
+                        <select id="edit-movement-dest-farm">
+                            <option value="">Seleccionar Finca Destino</option>
+                        </select>
+                        <select id="edit-movement-dest-land">
+                            <option value="">Seleccionar Lote Destino</option>
+                        </select>
+                    </div>
+
+                    <input type="text" id="edit-movement-motive" placeholder="Motivo">
+                    <button type="submit">Actualizar Movimiento</button>
+                    <button type="button" onclick="cancelEditMovement()">Cancelar</button>
+                </form>
+            </div>
+        </section>
+
+
+        <!-- Slaughter Weights Section -->
+        <section id="slaughter-weights" class="section hidden">
+            <h2>Peso Carne Sacrificio</h2>
+            <div class="form-container">
+                <h3>Registrar Peso de Carne</h3>
+                <form id="slaughter-form">
+                    <select id="slaughter-animal" required>
+                        <option value="">Seleccionar Animal</option>
+                    </select>
+                    <input type="datetime-local" id="slaughter-date" placeholder="Fecha de Sacrificio" required>
+                    <input type="number" id="slaughter-carcass-weight" placeholder="Peso Carne (kg)" step="0.01" required>
+                    <textarea id="slaughter-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Registrar Peso</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Pesos de Carne</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> ID Canal, Animal, Peso de Carne (kg), Fecha de Sacrificio
+                </div>
+                <ul id="slaughter-weights-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Editar Peso de Carne</h3>
+                <select id="edit-slaughter-select">
+                    <option value="">Seleccionar Registro para Editar</option>
+                </select>
+                <form id="edit-slaughter-form" style="display: none;">
+                    <select id="edit-slaughter-animal" required>
+                        <option value="">Seleccionar Animal</option>
+                    </select>
+                    <input type="datetime-local" id="edit-slaughter-date" placeholder="Fecha de Sacrificio">
+                    <input type="number" id="edit-slaughter-carcass-weight" placeholder="Peso Carne (kg)" step="0.01">
+                    <textarea id="edit-slaughter-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Actualizar Peso de Carne</button>
+                    <button type="button" onclick="cancelEditSlaughter()">Cancelar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Suppliers Section -->
+        <section id="suppliers" class="section hidden">
+            <h2>Proveedores</h2>
+            <div class="form-container">
+                <h3>Agregar Proveedor</h3>
+                <form id="supplier-form">
+                    <input type="text" id="supplier-name" placeholder="Nombre" required>
+                    <input type="text" id="supplier-nit" placeholder="NIT">
+                    <input type="text" id="supplier-contact" placeholder="Contacto">
+                    <input type="text" id="supplier-phone" placeholder="Teléfono">
+                    <input type="email" id="supplier-email" placeholder="Correo">
+                    <input type="text" id="supplier-city" placeholder="Ciudad">
+                    <input type="text" id="supplier-address" placeholder="Dirección">
+                    <button type="submit">Agregar Proveedor</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Proveedores</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> Nombre, Correo, Teléfono
+                </div>
+                <ul id="suppliers-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Editar Proveedor</h3>
+                <select id="edit-supplier-select">
+                    <option value="">Seleccionar Proveedor para Editar</option>
+                </select>
+                <form id="edit-supplier-form" style="display: none;">
+                    <input type="text" id="edit-supplier-name" placeholder="Nombre" required>
+                    <input type="text" id="edit-supplier-nit" placeholder="NIT">
+                    <input type="text" id="edit-supplier-contact" placeholder="Contacto">
+                    <input type="text" id="edit-supplier-phone" placeholder="Teléfono">
+                    <input type="email" id="edit-supplier-email" placeholder="Correo">
+                    <input type="text" id="edit-supplier-city" placeholder="Ciudad">
+                    <input type="text" id="edit-supplier-address" placeholder="Dirección">
+                    <button type="submit">Actualizar Proveedor</button>
+                    <button type="button" onclick="cancelEditSupplier()">Cancelar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Supplies Section -->
+        <section id="supplies" class="section hidden">
+            <h2>Suministros</h2>
+            <div class="form-container">
+                <h3>Agregar Suministro</h3>
+                <form id="supply-form">
+                    <select id="supply-supplier" required>
+                        <option value="">Seleccionar Proveedor</option>
+                    </select>
+                    <select id="supply-category" required onchange="updateSupplyUnit()">
+                        <option value="">Seleccionar Categoría</option>
+                        <option value="Agua">Agua</option>
+                        <option value="Luz">Luz</option>
+                        <option value="Suministros Alimentarios">Suministros Alimentarios</option>
+                        <option value="Medicamento">Medicamento</option>
+                    </select>
+                    <input type="text" id="supply-name" placeholder="Nombre" required>
+                    <div id="unit-container">
+                        <input type="text" id="supply-unit" placeholder="Unidad" readonly>
+                    </div>
+                    <input type="number" id="supply-price" placeholder="Precio Unitario" step="0.01">
+                    <input type="checkbox" id="supply-supplement"> Es Suplemento
+                    <input type="checkbox" id="supply-medicine"> Es Medicamento
+                    <textarea id="supply-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Agregar Suministro</button>
+                </form>
+                <div style="margin-top: 15px; padding: 10px; background-color: #f8f9fa; border-radius: 5px; border-left: 4px solid #007bff;">
+                    <strong>Guía de Clasificación:</strong><br>
+                    <strong>Es Suplemento:</strong> Vitaminas, minerales, aditivos nutricionales<br>
+                    <strong>Es Medicamento:</strong> Antibióticos, antiparasitarios, vacunas, tratamientos veterinarios<br>
+                    <em>Deja sin marcar para alimentos base (maíz, soya, pasto, etc.)</em><br>
+                    <strong>Nota 1:</strong> Los medicamentos se registran en la categoría "Medicamento" con unidad "unidades".
+                    <strong>Nota 2:</strong> LEl precio unitario se maneja en precio total del producto incluyendo impuestos.
+                </div>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Suministros</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> Nombre, Categoría, Unidad, Precio Unitario, Fecha de Registro
+                </div>
+                <ul id="supplies-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Editar Suministro</h3>
+                <select id="edit-supply-select">
+                    <option value="">Seleccionar Suministro para Editar</option>
+                </select>
+                <form id="edit-supply-form" style="display: none;">
+                    <select id="edit-supply-supplier" required>
+                        <option value="">Seleccionar Proveedor</option>
+                    </select>
+                    <select id="edit-supply-category" required onchange="updateEditSupplyUnit()">
+                        <option value="">Seleccionar Categoría</option>
+                        <option value="Agua">Agua</option>
+                        <option value="Luz">Luz</option>
+                        <option value="Suministros Alimentarios">Suministros Alimentarios</option>
+                        <option value="Medicamento">Medicamento</option>
+                    </select>
+                    <input type="text" id="edit-supply-name" placeholder="Nombre" required>
+                    <div id="edit-unit-container">
+                        <input type="text" id="edit-supply-unit" placeholder="Unidad" readonly>
+                    </div>
+                    <input type="number" id="edit-supply-price" placeholder="Precio Unitario" step="0.01">
+                    <input type="checkbox" id="edit-supply-supplement"> Es Suplemento
+                    <input type="checkbox" id="edit-supply-medicine"> Es Medicamento
+                    <textarea id="edit-supply-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Actualizar Suministro</button>
+                    <button type="button" onclick="cancelEditSupply()">Cancelar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Purchases Section -->
+        <section id="purchases" class="section hidden">
+            <h2>Compras y Servicios</h2>
+            <div class="form-container">
+                <h3>Agregar Compra o Servicio</h3>
+                <form id="purchase-form">
+                    <select id="purchase-supplier" required onchange="loadPurchaseSupplies()">
+                        <option value="">Seleccionar Proveedor</option>
+                    </select>
+                    <select id="purchase-farm" required>
+                        <option value="">Seleccionar Finca</option>
+                    </select>
+                    <input type="datetime-local" id="purchase-date" required>
+                    <select id="purchase-currency">
+                        <option value="COP">COP</option>
+                        <option value="USD">USD</option>
+                    </select>
+                    <select id="purchase-supply" required>
+                        <option value="">Seleccionar Suministro</option>
+                    </select>
+                    <input type="number" id="purchase-quantity" placeholder="Cantidad" step="0.01" min="0.01">
+                    <input type="number" id="purchase-unit-price" placeholder="Precio Unitario" step="0.01" min="0.01">
+                    <input type="number" id="purchase-subtotal" placeholder="Subtotal" step="0.01" readonly>
+                    <input type="number" id="purchase-taxes" placeholder="Impuestos" step="0.01" readonly>
+                    <input type="number" id="purchase-total" placeholder="Total" step="0.01" readonly>
+                    <textarea id="purchase-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Agregar Compra</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Compras</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> ID Compra, Proveedor, Finca, Suministro, Cantidad, Total, Fecha
+                </div>
+                <ul id="purchases-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Editar Compra o Servicio</h3>
+                <select id="edit-purchase-select">
+                    <option value="">Seleccionar Compra para Editar</option>
+                </select>
+                <form id="edit-purchase-form" style="display: none;">
+                    <select id="edit-purchase-supplier" required onchange="loadEditPurchaseSupplies()">
+                        <option value="">Seleccionar Proveedor</option>
+                    </select>
+                    <select id="edit-purchase-farm" required>
+                        <option value="">Seleccionar Finca</option>
+                    </select>
+                    <input type="datetime-local" id="edit-purchase-date" required>
+                    <select id="edit-purchase-currency">
+                        <option value="COP">COP</option>
+                        <option value="USD">USD</option>
+                    </select>
+                    <select id="edit-purchase-supply" required>
+                        <option value="">Seleccionar Suministro</option>
+                    </select>
+                    <input type="number" id="edit-purchase-quantity" placeholder="Cantidad" step="0.01" min="0.01">
+                    <input type="number" id="edit-purchase-unit-price" placeholder="Precio Unitario" step="0.01" min="0.01">
+                    <input type="number" id="edit-purchase-subtotal" placeholder="Subtotal" step="0.01" readonly>
+                    <input type="number" id="edit-purchase-taxes" placeholder="Impuestos" step="0.01">
+                    <input type="number" id="edit-purchase-total" placeholder="Total" step="0.01" readonly>
+                    <textarea id="edit-purchase-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Actualizar Compra</button>
+                    <button type="button" onclick="cancelEditPurchase()">Cancelar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Sales Section -->
+        <section id="sales" class="section hidden">
+            <h2>Ventas</h2>
+            <div class="form-container">
+                <h3>Agregar Venta</h3>
+                <form id="sale-form">
+                    <input type="text" id="sale-client" placeholder="Cliente" required>
+                    <select id="sale-type" required>
+                        <option value="">Seleccionar Tipo de Venta</option>
+                        <option value="Carne">Carne</option>
+                    </select>
+                    <select id="sale-farm" required onchange="loadSlaughteredAnimals()">
+                        <option value="">Seleccionar Finca</option>
+                    </select>
+                    <input type="datetime-local" id="sale-date" required>
+                    <div id="animal-selection" style="display: none; margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <h4>Seleccionar Animales Sacrificados</h4>
+                        <div id="slaughtered-animals-list"></div>
+                        <div id="selected-animals" style="margin-top: 10px; padding: 10px; background-color: #f8f9fa; border-radius: 5px;">
+                            <strong>Animales Seleccionados:</strong>
+                            <div id="selected-animals-list"></div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 5px 0;">
+                        <label style="width: 80px; margin-right: 10px;">Total:</label>
+                        <input type="text" id="sale-total" placeholder="COP$0" readonly style="background-color: #f8f9fa; flex: 1;">
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 5px 0;">
+                        <label style="width: 80px; margin-right: 10px;">Subtotal:</label>
+                        <input type="text" id="sale-subtotal" placeholder="COP$0" readonly style="background-color: #f8f9fa; flex: 1;">
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 5px 0;">
+                        <label style="width: 80px; margin-right: 10px;">Impuestos:</label>
+                        <input type="text" id="sale-taxes" placeholder="COP$0" readonly style="background-color: #f8f9fa; flex: 1;">
+                    </div>
+                    <small style="color: #666; font-size: 0.8em;">Precio ganado: 8928 COP/kg (octubre/2025)</small>
+                    <textarea id="sale-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Agregar Venta</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Ventas</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> Cliente, Tipo de Venta, Total, Fecha
+                </div>
+                <ul id="sales-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Editar Venta</h3>
+                <select id="edit-sale-select">
+                    <option value="">Seleccionar Venta para Editar</option>
+                </select>
+                <form id="edit-sale-form" style="display: none;">
+                    <input type="text" id="edit-sale-client" placeholder="Cliente" required>
+                    <select id="edit-sale-type" required>
+                        <option value="">Seleccionar Tipo de Venta</option>
+                        <option value="Carne">Carne</option>
+                    </select>
+                    <select id="edit-sale-farm" required>
+                        <option value="">Seleccionar Finca</option>
+                    </select>
+                    <input type="datetime-local" id="edit-sale-date" required>
+                    <input type="number" id="edit-sale-total" placeholder="Total (COP)" step="0.01" required>
+                    <input type="number" id="edit-sale-subtotal" placeholder="Subtotal" step="0.01" readonly style="background-color: #f8f9fa;">
+                    <input type="number" id="edit-sale-taxes" placeholder="Impuestos" step="0.01" readonly style="background-color: #f8f9fa;">
+                    <textarea id="edit-sale-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Actualizar Venta</button>
+                    <button type="button" onclick="cancelEditSale()">Cancelar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Rations Section -->
+        <section id="rations" class="section hidden">
+            <h2>Raciones</h2>
+            <div class="form-container">
+                <h3>Agregar Ración</h3>
+                <form id="ration-form">
+                    <input type="text" id="ration-name" placeholder="Nombre de la Ración" required>
+                    <select id="ration-type" required>
+                        <option value="">Seleccionar Tipo</option>
+                        <option value="Forraje">Forraje</option>
+                        <option value="Concentrado">Concentrado</option>
+                        <option value="Combinado">Combinado</option>
+                    </select>
+                    <input type="text" id="ration-objective" placeholder="Objetivo">
+                    <textarea id="ration-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Agregar Ración</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Raciones</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> ID Ración, Nombre, Tipo, Objetivo
+                </div>
+                <ul id="rations-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Editar Ración</h3>
+                <select id="edit-ration-select">
+                    <option value="">Seleccionar Ración para Editar</option>
+                </select>
+                <form id="edit-ration-form" style="display: none;">
+                    <input type="text" id="edit-ration-name" placeholder="Nombre de la Ración" required>
+                    <select id="edit-ration-type" required>
+                        <option value="">Seleccionar Tipo</option>
+                        <option value="Forraje">Forraje</option>
+                        <option value="Concentrado">Concentrado</option>
+                        <option value="Combinado">Combinado</option>
+                    </select>
+                    <input type="text" id="edit-ration-objective" placeholder="Objetivo">
+                    <textarea id="edit-ration-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Actualizar Ración</button>
+                    <button type="button" onclick="cancelEditRation()">Cancelar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Ration Ingredients Section -->
+        <section id="ration-ingredients" class="section hidden">
+            <h2>Ingredientes de Ración</h2>
+            <div class="form-container">
+                <h3>Agregar Ingrediente de Ración</h3>
+                <form id="ration-ingredient-form">
+                    <input type="text" id="ration-ingredient-id" placeholder="ID Ingrediente" required>
+                    <select id="ration-ingredient-ration" required>
+                        <option value="">Seleccionar Ración</option>
+                    </select>
+                    <select id="ration-ingredient-supply" required>
+                        <option value="">Seleccionar Suministro</option>
+                    </select>
+                    <input type="number" id="ration-ingredient-percentage" placeholder="Porcentaje MS" step="0.01" min="0" max="100" required>
+                    <input type="number" id="ration-ingredient-cost" placeholder="Costo Estimado (solo visualización)" step="0.01" readonly>
+                    <small style="color: #666; font-size: 0.8em;">Nota: La suma de porcentajes MS por ración no puede superar 100%. El costo estimado se calcula como: precio unitario × (porcentaje MS ÷ 100)</small>
+                    <button type="submit">Agregar Ingrediente</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Ingredientes de Ración</h3>
+                <ul id="ration-ingredients-list"></ul>
+            </div>
+        </section>
+
+        <!-- Animal Rations Section -->
+        <section id="animal-rations" class="section hidden">
+            <h2>Raciones de Animales</h2>
+            <div class="form-container">
+                <h3>Asignar Ración a Animal</h3>
+                <form id="animal-ration-form">
+                    <select id="animal-ration-ration" required>
+                        <option value="">Seleccionar Ración</option>
+                    </select>
+                    <select id="animal-ration-animal" required>
+                        <option value="">Seleccionar Animal</option>
+                    </select>
+                    <input type="datetime-local" id="animal-ration-start" placeholder="Fecha Inicio">
+                    <input type="datetime-local" id="animal-ration-end" placeholder="Fecha Fin">
+                    <textarea id="animal-ration-observations" placeholder="Observaciones"></textarea>
+                    <button type="submit">Asignar Ración</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Raciones de Animales</h3>
+                <ul id="animal-rations-list"></ul>
+            </div>
+        </section>
+
+
+        <!-- Export Documents Section -->
+        <section id="export-docs" class="section hidden">
+            <h2>Export Documents</h2>
+            <div class="form-container">
+                <h3>Add Export Document</h3>
+                <form id="export-doc-form">
+                    <input type="text" id="export-doc-id" placeholder="Document ID" required>
+                    <select id="export-doc-farm" required>
+                        <option value="">Select Farm</option>
+                    </select>
+                    <select id="export-doc-land" required>
+                        <option value="">Select Land</option>
+                    </select>
+                    <select id="export-doc-animal" required>
+                        <option value="">Select Animal</option>
+                    </select>
+                    <input type="text" id="export-doc-destination" placeholder="Destination Country">
+                    <input type="text" id="export-doc-port" placeholder="Port of Embarkation">
+                    <input type="datetime-local" id="export-doc-date" placeholder="Embarkation Date">
+                    <textarea id="export-doc-observations" placeholder="Observations"></textarea>
+                    <button type="submit">Add Export Document</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Export Documents List</h3>
+                <ul id="export-docs-list"></ul>
+            </div>
+        </section>
+
+        <!-- Certificates Section -->
+        <section id="certificates" class="section hidden">
+            <h2>Certificates</h2>
+            <div class="form-container">
+                <h3>Add Certificate</h3>
+                <form id="certificate-form">
+                    <input type="text" id="certificate-id" placeholder="Certificate ID" required>
+                    <select id="certificate-export-doc" required>
+                        <option value="">Select Export Document</option>
+                    </select>
+                    <input type="text" id="certificate-type" placeholder="Certificate Type" required>
+                    <input type="text" id="certificate-code" placeholder="Code">
+                    <input type="datetime-local" id="certificate-issue-date" placeholder="Issue Date">
+                    <input type="datetime-local" id="certificate-expiry-date" placeholder="Expiry Date">
+                    <input type="text" id="certificate-entity" placeholder="Issuing Entity">
+                    <input type="text" id="certificate-status" placeholder="Status">
+                    <textarea id="certificate-observations" placeholder="Observations"></textarea>
+                    <button type="submit">Add Certificate</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Certificates List</h3>
+                <ul id="certificates-list"></ul>
+            </div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="users" class="section hidden">
+            <h2>Users</h2>
+            <div class="form-container">
+                <h3>Add User</h3>
+                <form id="user-form">
+                    <input type="text" id="user-id" placeholder="User ID" required>
+                    <input type="text" id="user-name" placeholder="Name" required>
+                    <input type="text" id="user-role" placeholder="Role">
+                    <input type="email" id="user-email" placeholder="Email">
+                    <input type="text" id="user-phone" placeholder="Phone">
+                    <input type="text" id="user-organization" placeholder="Organization">
+                    <select id="user-active">
+                        <option value="Yes">Active</option>
+                        <option value="No">Inactive</option>
+                    </select>
+                    <button type="submit">Add User</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Users List</h3>
+                <ul id="users-list"></ul>
+            </div>
+        </section>
+
+        <!-- User Farms Section -->
+        <section id="user-farms" class="section hidden">
+            <h2>User Farm Assignments</h2>
+            <div class="form-container">
+                <h3>Assign User to Farm</h3>
+                <form id="user-farm-form">
+                    <input type="text" id="user-farm-id" placeholder="Assignment ID" required>
+                    <select id="user-farm-user" required>
+                        <option value="">Select User</option>
+                    </select>
+                    <select id="user-farm-farm" required>
+                        <option value="">Select Farm</option>
+                    </select>
+                    <input type="text" id="user-farm-role" placeholder="Role in Farm">
+                    <input type="datetime-local" id="user-farm-assignment-date" placeholder="Assignment Date">
+                    <button type="submit">Assign User</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>User Farm Assignments List</h3>
+                <ul id="user-farms-list"></ul>
+            </div>
+        </section>
+
+        <!-- Lands Section -->
+        <section id="lands" class="section hidden">
+            <h2>Land Management</h2>
+            <div class="form-container">
+                <h3>Add New Land</h3>
+                <form id="land-form">
+                    <select id="land-farm" required>
+                        <option value="">Select Farm</option>
+                    </select>
+                    <input type="text" id="land-name" placeholder="Nombre Lote" required>
+                    <input type="number" id="land-area" placeholder="Area (ha)" step="0.01">
+                    <select id="land-actividad" required>
+                        <option value="">Select Actividad Ganado</option>
+                        <option value="Cría">Cría</option>
+                        <option value="Levante">Levante</option>
+                        <option value="Ceba">Ceba</option>
+                        <option value="Recuperación">Recuperación</option>
+                    </select>
+                    <input type="text" id="land-obs" placeholder="Observaciones">
+                    <button type="submit">Add Land</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Lotes</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> Nombre del Lote, Área (ha), Actividad Ganadera
+                </div>
+                <ul id="lands-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Edit Land</h3>
+                <select id="edit-land-select">
+                    <option value="">Select Land to Edit</option>
+                </select>
+                <form id="edit-land-form" style="display: none;">
+                    <select id="edit-land-farm" required>
+                        <option value="">Select Farm</option>
+                    </select>
+                    <input type="text" id="edit-land-name" placeholder="Nombre Lote" required>
+                    <input type="number" id="edit-land-area" placeholder="Area (ha)" step="0.01">
+                    <select id="edit-land-actividad" required>
+                        <option value="">Select Actividad Ganado</option>
+                        <option value="Cría">Cría</option>
+                        <option value="Levante">Levante</option>
+                        <option value="Ceba">Ceba</option>
+                        <option value="Recuperación">Recuperación</option>
+                    </select>
+                    <input type="text" id="edit-land-obs" placeholder="Observaciones">
+                    <button type="submit">Update Land</button>
+                    <button type="button" onclick="cancelEditLand()">Cancel</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Animals Section -->
+        <section id="animals" class="section hidden">
+            <h2>Animal Management</h2>
+            <div class="form-container">
+                <h3>Add New Animal</h3>
+                <form id="animal-form">
+                    <input type="text" id="animal-id" placeholder="Bovino ID (XXXX-X format)" required pattern="[0-9]{4}-[0-9]" title="Format: XXXX-X (4 digits, dash, 1 digit)">
+                    <select id="animal-farm" required>
+                        <option value="">Select Farm</option>
+                    </select>
+                    <select id="animal-land" required>
+                        <option value="">Select Land</option>
+                    </select>
+                    <select id="animal-sexo">
+                        <option value="M">Macho</option>
+                        <option value="F">Hembra</option>
+                    </select>
+                    <input type="text" id="animal-raza" placeholder="Raza">
+                    <input type="datetime-local" id="animal-birth" placeholder="Fecha Nacimiento">
+                    <input type="text" id="animal-estado" placeholder="Estado">
+                    <input type="text" id="animal-madre" placeholder="Madre ID (XXXX-X format)" pattern="[0-9]{4}-[0-9]" title="Format: XXXX-X (4 digits, dash, 1 digit)">
+                    <input type="text" id="animal-padre" placeholder="Padre ID (XXXX-X format)" pattern="[0-9]{4}-[0-9]" title="Format: XXXX-X (4 digits, dash, 1 digit)">
+                    <small style="color: #666; font-size: 0.8em;">Poner código de trabajo en formato XXXX-X para Bovino ID, Madre ID y Padre ID</small>
+                    <input type="text" id="animal-origen" placeholder="Origen">
+                    <input type="text" id="animal-proposito" placeholder="Propósito">
+                    <button type="submit">Add Animal</button>
+                </form>
+            </div>
+            <div class="list-container">
+                <h3>Lista de Animales</h3>
+                <div style="background-color: #e8f4fd; padding: 8px; margin-bottom: 10px; border-radius: 4px; font-size: 0.9em; color: #2c5aa0;">
+                    <strong>📋 Información mostrada:</strong> ID Bovino, Raza, Actividad Productiva, Fecha de Nacimiento
+                </div>
+                <ul id="animals-list"></ul>
+            </div>
+            <div class="edit-container">
+                <h3>Editar Animal</h3>
+                <select id="edit-animal-select">
+                    <option value="">Seleccionar Animal para Editar</option>
+                </select>
+                <form id="edit-animal-form" style="display: none;">
+                    <input type="text" id="edit-animal-id" placeholder="Bovino ID (XXXX-X format)" required pattern="[0-9]{4}-[0-9]" title="Format: XXXX-X (4 digits, dash, 1 digit)">
+                    <select id="edit-animal-farm" required>
+                        <option value="">Select Farm</option>
+                    </select>
+                    <select id="edit-animal-land" required>
+                        <option value="">Select Land</option>
+                    </select>
+                    <select id="edit-animal-sexo">
+                        <option value="M">Macho</option>
+                        <option value="F">Hembra</option>
+                    </select>
+                    <input type="text" id="edit-animal-raza" placeholder="Raza">
+                    <input type="datetime-local" id="edit-animal-birth" placeholder="Fecha Nacimiento">
+                    <input type="text" id="edit-animal-estado" placeholder="Estado">
+                    <input type="text" id="edit-animal-madre" placeholder="Madre ID (XXXX-X format)" pattern="[0-9]{4}-[0-9]" title="Format: XXXX-X (4 digits, dash, 1 digit)">
+                    <input type="text" id="edit-animal-padre" placeholder="Padre ID (XXXX-X format)" pattern="[0-9]{4}-[0-9]" title="Format: XXXX-X (4 digits, dash, 1 digit)">
+                    <small style="color: #666; font-size: 0.8em;">Poner código de trabajo en formato XXXX-X para Bovino ID, Madre ID y Padre ID</small>
+                    <input type="text" id="edit-animal-origen" placeholder="Origen">
+                    <input type="text" id="edit-animal-proposito" placeholder="Propósito">
+                    <button type="submit">Actualizar Animal</button>
+                    <button type="button" onclick="cancelEditAnimal()">Cancelar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Data Input Section -->
+        <section id="data-input" class="section hidden">
+            <h2>Data Input</h2>
+            <div class="data-forms">
+                <div class="form-container">
+                    <h3>Weight Log</h3>
+                    <form id="weight-form">
+                        <select id="weight-animal" required>
+                            <option value="">Select Animal</option>
+                        </select>
+                        <input type="number" id="weight-value" placeholder="Weight (kg)" step="0.01" required>
+                        <input type="datetime-local" id="weight-date">
+                        <button type="submit">Add Weight</button>
+                    </form>
+                </div>
+
+                <div class="form-container">
+                    <h3>Emission Log</h3>
+                    <form id="emission-form">
+                        <select id="emission-animal" required>
+                            <option value="">Select Animal</option>
+                        </select>
+                        <input type="number" id="co2-value" placeholder="CO2 Emissions" step="0.01">
+                        <input type="number" id="methane-value" placeholder="Methane Emissions" step="0.01">
+                        <input type="datetime-local" id="emission-date">
+                        <button type="submit">Add Emissions</button>
+                    </form>
+                </div>
+
+                <div class="form-container">
+                    <h3>Finance Log</h3>
+                    <form id="finance-form">
+                        <select id="finance-animal" required>
+                            <option value="">Select Animal</option>
+                        </select>
+                        <input type="number" id="feed-cost" placeholder="Feed Cost" step="0.01">
+                        <input type="number" id="medical-cost" placeholder="Medical Cost" step="0.01">
+                        <input type="number" id="sale-revenue" placeholder="Sale Revenue" step="0.01">
+                        <input type="datetime-local" id="finance-date">
+                        <button type="submit">Add Finance</button>
+                    </form>
+                </div>
+
+                <div class="form-container">
+                    <h3>Resource Log</h3>
+                    <form id="resource-form">
+                        <select id="resource-land" required>
+                            <option value="">Select Land</option>
+                        </select>
+                        <input type="number" id="feed-available" placeholder="Feed Available" step="0.01">
+                        <input type="number" id="water-available" placeholder="Water Available" step="0.01">
+                        <input type="datetime-local" id="resource-date">
+                        <button type="submit">Add Resources</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="section hidden">
+            <h2>Analytics Dashboard</h2>
+            <div class="analytics-container">
+                <div class="analytics-item">
+                    <h3>Farm Analytics</h3>
+                    <select id="analytics-farm">
+                        <option value="">Select Farm</option>
+                    </select>
+                    <div id="farm-analytics"></div>
+                </div>
+
+                <div class="analytics-item">
+                    <h3>Land Analytics</h3>
+                    <select id="analytics-land">
+                        <option value="">Select Land</option>
+                    </select>
+                    <div id="land-analytics"></div>
+                </div>
+
+                <div class="analytics-item">
+                    <h3>Animal Analytics</h3>
+                    <select id="analytics-animal">
+                        <option value="">Select Animal</option>
+                    </select>
+                    <div id="animal-analytics"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
